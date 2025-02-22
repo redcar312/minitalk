@@ -1,42 +1,34 @@
 #include "minitalk.h"
+
 volatile sig_atomic_t server_status;
 
-void    end_handler(int signo)
+void    end_handler(void)
 {
     write_handler("Message recieved!\n");
-    exit(1);
+    exit(0);
 }
 
-void    response_handler(int signo)
+void    response_handler(void)
 {
-    server_status = 1;
+    	server_status = 1;
+    	write_handler("send more ");
 }
 
-void    kill_handler(pid_t pid, int signo)
-{
-    if(kill(pid, signo) == -1)
-    {
-        print_error("kill error");
-        exit(0);
-    }
-}
 void    send_bit(char c, pid_t server_pid)
 {
     int i;
-    unsigned char temp;
+    unsigned char	temp;
 
-    temp = (unsigned char)c
-    i = 0;
-    while(i < CHAR_BIT)
-        i++;
-    while(i > 0)
+    i = CHAR_BIT;
+    while (i > 0)
     {
         i--;
-        if(temp >> i)
-            kill_handler(pid, SIGUSR1)
+       	temp = (unsigned char)c >> i;
+        if (temp % 2 == 0)
+            kill_handler(server_pid, SIGUSR2);
         else
-            kill_handler(pid, SIGUSR2);
-        while(server_status == 0)
+            kill_handler(server_pid, SIGUSR1);
+        while (server_status == 0)
             usleep(30);
         server_status = 0;
     }
@@ -47,25 +39,24 @@ void send_msg(char *msg, pid_t server_pid)
     size_t  i;
 
     i = 0;
-    while(msg[i])
+    while (msg[i])
     {
+    	signal_handler(SIGUSR1, response_handler, false);
+    	signal_handler(SIGUSR2, end_handler, false);
         send_bit(msg[i], server_pid);
         i++;
     }
-    send_bit('\0', server_pid)
+    send_bit('\0', server_pid);
 }
 
 int main(int argc, char **argv)
 {
     pid_t pid;
-    if(ac != 3)
+    if (argc != 3 || !argv[2] || !argv[1])
     {    
         print_error("argument error");
-        exit();
+        exit(1);
     }
     pid = (pid_t)atoi(argv[1]);
-    signal_handler(SIGUSR1, response_handler, false);
-    signal_hanlder(SIGUSR2, end_handler, false);
-    send_msg(argv[2])
-
+    send_msg(argv[2], pid);
 }

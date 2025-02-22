@@ -7,4 +7,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
+
+
+void    signal_handler(int, void *, bool SA_INFO);
+void	write_handler(char *str);
+void    kill_handler(pid_t pid, int signo);
+void    print_error(char *str);
+void 	print_pid(pid_t pid);
+void    server_signal_handler(int signo, siginfo_t *info, void *more_info);
+
 #endif
