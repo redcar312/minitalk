@@ -1,5 +1,17 @@
 #include "minitalk.h" 
 
+static void	handle_char_print(unsigned char c)
+{
+	ssize_t	i;
+	
+	i = write(1, &c, 1);
+	if (i == -1)
+	{
+		print_error("Write Error");
+		exit(1);	
+	}
+}
+
 void    server_signal_handler(int signo, siginfo_t *info, void *more_info)
 {
     static unsigned char current_c;
@@ -16,12 +28,14 @@ void    server_signal_handler(int signo, siginfo_t *info, void *more_info)
     
         if (current_c == '\0')
         {
+            current_c = 0;
+	    bit = 0;
             write(1, "\n", 1);
             kill_handler(client_pid, SIGUSR2);
         }
         else
         {
-           	write(1, &current_c, 1);
+           	handle_char_print(current_c);
         }
         current_c = 0;
         bit = 0;

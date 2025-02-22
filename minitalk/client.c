@@ -11,7 +11,6 @@ void    end_handler(void)
 void    response_handler(void)
 {
     	server_status = 1;
-    	write_handler("send more ");
 }
 
 void    send_bit(char c, pid_t server_pid)
@@ -39,10 +38,10 @@ void send_msg(char *msg, pid_t server_pid)
     size_t  i;
 
     i = 0;
+    signal_handler(SIGUSR1, response_handler, false);
+    signal_handler(SIGUSR2, end_handler, false);
     while (msg[i])
     {
-    	signal_handler(SIGUSR1, response_handler, false);
-    	signal_handler(SIGUSR2, end_handler, false);
         send_bit(msg[i], server_pid);
         i++;
     }
