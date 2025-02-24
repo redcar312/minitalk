@@ -56,6 +56,6 @@ int main(int argc, char **argv)
         print_error("argument error");
         exit(1);
     }
-    pid = (pid_t)atoi(argv[1]);
+    pid = (pid_t)f_atoi(argv[1]);
     send_msg(argv[2], pid);
 }

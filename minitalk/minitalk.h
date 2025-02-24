@@ -14,6 +14,6 @@ void	write_handler(char *str);
 void    kill_handler(pid_t pid, int signo);
 void    print_error(char *str);
 void 	print_pid(pid_t pid);
-void    server_signal_handler(int signo, siginfo_t *info, void *more_info);
-
+void    server_signal_handler(int signo, siginfo_t *info);
+int	f_atoi(const char *str);
 #endif

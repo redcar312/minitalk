@@ -3,7 +3,7 @@
 void    signal_handler(int signo, void *handler, bool SA_INFO)
 {
     struct sigaction sa;
-    if(SA_INFO)
+    if (SA_INFO)
     {
         sa.sa_flags = SA_SIGINFO;
         sa.sa_sigaction = handler;
@@ -55,9 +55,9 @@ void    print_error(char *str)
     size_t  i;
 
     i = 0;
-    if(!str)
+    if (!str)
         return ;
-    while(str[i])
+    while (str[i])
     {
         write(2, &str[i], 1);
         i++;
@@ -68,15 +68,21 @@ void    print_error(char *str)
 void  print_pid(pid_t pid)
 {
     char    c;
-
+    int	i;
+    
     if (pid >= 10)
     {
         print_pid(pid / 10);
         print_pid(pid % 10);
     }
-    if (pid < 10)
+    else
     {
         c = pid + '0';
-        write_handler(&c);
+        i = write(1, &c, 1);
+        if (i == -1)
+        {
+		print_error("Write error");
+		exit(1);
+        }	
     }
 }

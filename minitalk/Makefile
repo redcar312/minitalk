@@ -10,9 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-CSRCS	= client.c utils.c
+CSRCS	= client.c utils.c ft_atoi.c
 
-SSRCS	= server.c utils.c
+SSRCS	= server.c utils.c ft_atoi.c
 
 HEAD	= ./
 
@@ -48,6 +48,6 @@ fclean:	clean
 	rm -f ${CNAME}
 	rm -f ${SNAME}
 
-re:	fclean all bonus clean
+re:	fclean all clean
 
-.PHONY:	all clean fclean re bonus
+.PHONY:	all clean fclean re
